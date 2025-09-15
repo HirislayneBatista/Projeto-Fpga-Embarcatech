@@ -42,6 +42,7 @@ add_executable(teste_3
     teste_3.c
     inc/sd_card/sd_card_handler.c
     inc/sd_card/hw_config.c
+    no-OS-FatFS-SD-SPI-RPi-Pico/simple_example/simple_example.cpp
      )
 
 pico_set_program_name(teste_3 "teste_3")

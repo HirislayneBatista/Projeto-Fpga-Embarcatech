@@ -1,9 +1,9 @@
 import serial, time
 from pathlib import Path
 
-SERIAL_PORT = "COM11"   # ajuste
+SERIAL_PORT = "COM10"   # ajuste
 BAUD = 115200
-OUTPUT_PATH = Path("C:/Users/SeuUsuario/Desktop/pico_received")
+OUTPUT_PATH = Path("C:/Users/55999/Pictures/Projeto_embarcas")
 OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
 
 def read_line(ser, timeout=30):
