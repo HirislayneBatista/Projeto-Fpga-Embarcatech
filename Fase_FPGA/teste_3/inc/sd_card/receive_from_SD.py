@@ -1,46 +1,38 @@
-import serial, time
+import serial
 from pathlib import Path
 
-SERIAL_PORT = "COM10"   # ajuste
+SERIAL_PORT = "COM10"   # porta correta
 BAUD = 115200
-OUTPUT_PATH = Path("C:/Users/55999/Pictures/Projeto_embarcas")
-OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
 
-def read_line(ser, timeout=30):
-    end = time.time() + timeout
-    b = b""
-    while time.time() < end:
-        c = ser.read(1)
-        if not c:
+with serial.Serial(SERIAL_PORT, BAUD, timeout=1) as ser:
+    filename = None
+    filesize = 0
+    received = 0
+    file = None
+
+    while True:
+        line = ser.readline().decode(errors="ignore").strip()
+        if line.startswith("FILE_START"):
+            _, fname, fsize = line.split()
+            filename = Path(fname).name  # só o nome, sem "D:" nem caminho estranho
+            filesize = int(fsize)
+            file = open(filename, "wb")
+            print(f"[PC] Recebendo {filename} ({filesize} bytes)...")
+            received = 0
             continue
-        if c == b'\n':
-            return b.decode().strip()
-        if c != b'\r':
-            b += c
-    return None
 
-with serial.Serial(SERIAL_PORT, BAUD, timeout=0.1) as ser:
-    print("Aguardando header SIZE...")
-    line = read_line(ser, timeout=30)
-    if not line or not line.startswith("SIZE:"):
-        print("Header não recebido:", line)
-        raise SystemExit
-    size = int(line.split(":",1)[1])
-    print(f"Tamanho = {size} bytes. Enviando READY...")
-    ser.write(b"READY\n")
+        if line == "FILE_END":
+            if file:
+                file.close()
+            print(f"[PC] Arquivo {filename} salvo com sucesso.")
+            break
 
-    out_file = OUTPUT_PATH / f"received_{int(time.time())}.jpg"
-    remaining = size
-    t0 = time.perf_counter()
-    with open(out_file, "wb") as f:
-        while remaining > 0:
-            chunk = ser.read(min(65536, remaining))
-            if not chunk:
-                continue
-            f.write(chunk)
-            remaining -= len(chunk)
-    t1 = time.perf_counter()
-    elapsed = t1 - t0
-    mb = size / (1024*1024)
-    print(f"Recebido {size} bytes em {elapsed:.3f}s -> {mb/elapsed:.3f} MB/s")
-    print("Salvo:", out_file)
+        # Se não estamos lendo cabeçalhos, são dados brutos
+        if file:
+            data = ser.read(filesize - received)
+            file.write(data)
+            received += len(data)
+            if received >= filesize:
+                print(f"[PC] Recebimento concluído ({received} bytes).")
+                file.close()
+                break

@@ -23,6 +23,5 @@ int main() {
 
     exemplo_text();
 
-
     return 0;
 }
