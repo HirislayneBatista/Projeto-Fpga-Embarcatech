@@ -9,7 +9,7 @@
 #include "pico/stdlib.h"
 #include <string.h>         // Para memcpy
 #include <stdio.h>          // Para printf
-#include "no-OS-FatFS-SD-SPI-RPi_Pico/Fats_SPI/ff15/source/ff.h"
+#include "no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI/ff15/source/ff.h"
 
 
 #define SEND_CHUNK_BYTES (16 * 1024) // 16 KiB (múltiplo de 512)

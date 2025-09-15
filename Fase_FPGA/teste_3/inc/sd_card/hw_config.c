@@ -6,7 +6,7 @@ Copyright 2021 Carl John Kugler III
 #include <string.h>
 #include "my_debug.h"
 #include "hw_config.h"
-#include "no-OS-FatFS-SD-SPI-RPi_Pico/Fats_SPI/ff15/source/ff.h"
+#include "no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI/ff15/source/ff.h"
 #include "diskio.h" 
 
 // Configuração dos barramentos SPI

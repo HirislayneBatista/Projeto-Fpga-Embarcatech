@@ -3,12 +3,12 @@
 
 #include <stdbool.h>
 //#include "../rfid/tag_data_handler.h"
-#include "no-OS-FatFS-SD-SPI-RPi_Pico/Fats_SPI/ff15/source/ff.h"
+#include "no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI/ff15/source/ff.h"
 
 // A estrutura global FATFS precisa ser acessível
 extern FATFS fs_global;
 
-//bool Sdh_Init(void);
+bool Sdh_Init(void);
 //bool Sdh_LogBoarding(StudentDataBlock *data);
 //bool Sdh_PrintLogsToSerial(void);
 
@@ -16,7 +16,7 @@ extern FATFS fs_global;
 
 bool Sdh_SendFileToHost(const char *fname);
 
-static int wait_for_host_ready_ms(int timeout_ms)
+static int wait_for_host_ready_ms(int timeout_ms);
 
 /**
  * @brief Apaga o arquivo de log do cartão SD.
